@@ -1,0 +1,326 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "API de Integração com Adaptor Auto Atendimento",
+        "description": "[![Personal](https://s3.amazonaws.com/ps.public/images/logo_PersonalSoft_horizontal_COR-e1448044980572.png)](http://www.personalsoft.net.br)<p> Permite integração de Carga, Acordo, Pagamento e Retirada  dos contratos para Auto atendimento",
+        "version": "v1"
+    },
+    "paths": {
+        "/api/Dividas": {
+            "post": {
+                "tags": [
+                    "Dividas"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdDivida"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdDivida"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdDivida"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/Dividas/acordos": {
+            "get": {
+                "tags": [
+                    "Dividas"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/Dividas/baixa": {
+            "post": {
+                "tags": [
+                    "Dividas"
+                ],
+                "parameters": [
+                    {
+                        "name": "acordoId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "parcelaAcordoId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/Dividas/{dividaId}": {
+            "delete": {
+                "tags": [
+                    "Dividas"
+                ],
+                "parameters": [
+                    {
+                        "name": "dividaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "MdDivida": {
+                "type": "object",
+                "properties": {
+                    "dividaId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "contrato": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "contrato2": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "uf": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia": {
+                        "$ref": "#/components/schemas/MdEstrategia"
+                    },
+                    "scores": {
+                        "$ref": "#/components/schemas/MdScore"
+                    },
+                    "devedor": {
+                        "$ref": "#/components/schemas/MdPessoa"
+                    },
+                    "parcelas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MdParcelaOriginal"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdEmail": {
+                "type": "object",
+                "properties": {
+                    "emailId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "enderecoEmail": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdEndereco": {
+                "type": "object",
+                "properties": {
+                    "enderecoId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "logradouro": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "numero": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "complemento": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estado": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "cep": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdEstrategia": {
+                "type": "object",
+                "properties": {
+                    "estrategia001": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia002": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia003": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia004": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia006": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "estrategia007": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdParcelaOriginal": {
+                "type": "object",
+                "properties": {
+                    "parcelaDividaId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "vencimento": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "titulo": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdPessoa": {
+                "type": "object",
+                "properties": {
+                    "pessoaId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "cpfCnpj": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "scores": {
+                        "$ref": "#/components/schemas/MdScore"
+                    },
+                    "enderecos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MdEndereco"
+                        },
+                        "nullable": true
+                    },
+                    "telefones": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MdTelefone"
+                        },
+                        "nullable": true
+                    },
+                    "emails": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MdEmail"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdScore": {
+                "type": "object",
+                "properties": {
+                    "score01": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "score02": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdTelefone": {
+                "type": "object",
+                "properties": {
+                    "telefoneId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "numero": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    }
+}
