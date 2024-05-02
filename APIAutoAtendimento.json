@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "API de Integração com Adaptor Auto Atendimento",
-        "description": "[![Personal](https://s3.amazonaws.com/ps.public/images/logo_PersonalSoft_horizontal_COR-e1448044980572.png)](http://www.personalsoft.net.br)<p> Permite integração de Carga, Acordo, Pagamento e Retirada  dos contratos para Auto atendimento",
+        "title": "API de Integração com Adaptor Autoatendimento",
+        "description": "[![Personal](https://s3.amazonaws.com/ps.public/images/logo_PersonalSoft_horizontal_COR-e1448044980572.png)](http://www.personalsoft.net.br)<p> Permite integração de Carga, Acordo, Pagamento e Retirada  dos contratos para Autoatendimento",
         "version": "v1"
     },
     "paths": {
