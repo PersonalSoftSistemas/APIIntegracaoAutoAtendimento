@@ -11,70 +11,232 @@
                 "tags": [
                     "Dividas"
                 ],
+                "summary": "Inclusão de divida novas na base",
                 "requestBody": {
+                    "description": "",
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MdDivida"
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/MdDivida"
+                                }
                             }
                         },
                         "text/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MdDivida"
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/MdDivida"
+                                }
                             }
                         },
                         "application/*+json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MdDivida"
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/MdDivida"
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
                     }
                 }
             }
         },
-        "/api/Dividas/acordos": {
+        "/api/Dividas/Acordos/Pedente": {
             "get": {
                 "tags": [
                     "Dividas"
                 ],
+                "summary": "Retorna uma lista de acordos realizados no Adaptor porém que ainda não foram enviados \r\npara o solicitante",
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
                     }
                 }
             }
         },
-        "/api/Dividas/baixa": {
-            "post": {
+        "/api/Dividas/Acordos/{Data}": {
+            "get": {
                 "tags": [
                     "Dividas"
                 ],
+                "summary": "Lista de acordo de uma data específcia",
                 "parameters": [
                     {
-                        "name": "acordoId",
-                        "in": "query",
+                        "name": "Data",
+                        "in": "path",
+                        "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        }
-                    },
-                    {
-                        "name": "parcelaAcordoId",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetornoAcordo"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/api/Dividas/Baixa": {
+            "post": {
+                "tags": [
+                    "Dividas"
+                ],
+                "summary": "Baixar parcela do acordo",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "Pagamentos": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/MdBaixaAcordo"
+                                        }
+                                    }
+                                }
+                            },
+                            "encoding": {
+                                "Pagamentos": {
+                                    "style": "form"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
                     }
                 }
             }
@@ -84,20 +246,75 @@
                 "tags": [
                     "Dividas"
                 ],
+                "summary": "Retira de cobrança dividas que estão na listagem",
                 "parameters": [
                     {
                         "name": "dividaId",
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int32"
+                            "type": "string"
                         }
                     }
                 ],
+                "requestBody": {
+                    "description": "",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
                     }
                 }
             }
@@ -105,23 +322,69 @@
     },
     "components": {
         "schemas": {
+            "CampoChave": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "maxLength": 20,
+                        "type": "string",
+                        "description": "Identificação do campo Chave no legado",
+                        "nullable": true
+                    },
+                    "nome": {
+                        "maxLength": 30,
+                        "type": "string",
+                        "description": "Nome do campo Chave no Legado",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MdBaixaAcordo": {
+                "type": "object",
+                "properties": {
+                    "acordoId": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "parcelaAcordoId": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
             "MdDivida": {
+                "required": [
+                    "produto"
+                ],
                 "type": "object",
                 "properties": {
                     "dividaId": {
+                        "maxLength": 40,
                         "type": "string",
+                        "description": "Identificador da Dívida no sistema legado",
                         "nullable": true
                     },
                     "contrato": {
+                        "maxLength": 30,
                         "type": "string",
+                        "description": "Número do Contrato da dívida",
                         "nullable": true
                     },
                     "contrato2": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Número do Contrato 2 da dívida (opcional)",
                         "nullable": true
                     },
+                    "produto": {
+                        "$ref": "#/components/schemas/CampoChave"
+                    },
                     "uf": {
+                        "maxLength": 2,
                         "type": "string",
+                        "description": "UF do contrato para segregação de estratégia da dívida",
                         "nullable": true
                     },
                     "estrategia": {
@@ -138,129 +401,223 @@
                         "items": {
                             "$ref": "#/components/schemas/MdParcelaOriginal"
                         },
+                        "description": "Dados de Parcelas Originais da Dívida",
                         "nullable": true
                     }
                 },
                 "additionalProperties": false
             },
             "MdEmail": {
+                "required": [
+                    "enderecoEmail"
+                ],
                 "type": "object",
                 "properties": {
                     "emailId": {
                         "type": "string",
+                        "description": "Identificador do e-mail nolegado",
                         "nullable": true
                     },
                     "enderecoEmail": {
+                        "maxLength": 60,
+                        "minLength": 1,
+                        "pattern": "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x21\\\\x23-\\\\x5b\\\\x5d-\\\\x7f]|\\\\\\\\[\\\\x01-\\\\x09\\\\x0b\\\\x0c\\\\x0e-\\\\x7f])*\")@(?:a-z0-9?\\\\.)+a-z0-9?\r\n",
                         "type": "string",
-                        "nullable": true
+                        "description": "Endereço de e-mail"
                     }
                 },
                 "additionalProperties": false
             },
             "MdEndereco": {
+                "required": [
+                    "bairro",
+                    "cidade",
+                    "complemento",
+                    "estado",
+                    "logradouro",
+                    "numero"
+                ],
                 "type": "object",
                 "properties": {
                     "enderecoId": {
                         "type": "string",
+                        "description": "Identificaçãodo endereço no Legado",
                         "nullable": true
+                    },
+                    "tipoEndereco": {
+                        "$ref": "#/components/schemas/TipoEndereco"
                     },
                     "logradouro": {
+                        "maxLength": 60,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Descrição do Logradouro"
                     },
                     "numero": {
+                        "maxLength": 10,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Número Logradouro"
                     },
                     "complemento": {
+                        "maxLength": 30,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Dados complementares Ex. Bloco A apto 1001"
                     },
                     "bairro": {
+                        "maxLength": 30,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Bairro"
                     },
                     "cidade": {
+                        "maxLength": 60,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Cidade"
                     },
                     "estado": {
+                        "maxLength": 2,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "UF"
                     },
                     "cep": {
-                        "type": "string",
-                        "nullable": true
+                        "maximum": 99999999,
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "CEP",
+                        "format": "int64"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Dados do Endereço"
             },
             "MdEstrategia": {
                 "type": "object",
                 "properties": {
                     "estrategia001": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 001 de estratégia",
                         "nullable": true
                     },
                     "estrategia002": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 002 de estratégia",
                         "nullable": true
                     },
                     "estrategia003": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 003 de estratégia",
                         "nullable": true
                     },
                     "estrategia004": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 004 de estratégia",
+                        "nullable": true
+                    },
+                    "estrategia005": {
+                        "maxLength": 20,
+                        "type": "string",
+                        "description": "Campo livre 005 de estratégia",
                         "nullable": true
                     },
                     "estrategia006": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 006 de estratégia",
                         "nullable": true
                     },
-                    "estrategia007": {
+                    "estrategia008": {
+                        "maxLength": 20,
                         "type": "string",
+                        "description": "Campo livre 007 de estratégia",
                         "nullable": true
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Campos de segregação de estratégia da divida"
             },
             "MdParcelaOriginal": {
+                "required": [
+                    "parcelaDividaId",
+                    "valorDevido",
+                    "valorOriginal",
+                    "vencimento"
+                ],
                 "type": "object",
                 "properties": {
                     "parcelaDividaId": {
                         "type": "integer",
+                        "description": "Identificação da Parcela no Legado",
                         "format": "int32"
                     },
-                    "valor": {
+                    "valorOriginal": {
                         "type": "number",
+                        "description": "Valor da Parcela Original da parcela",
+                        "format": "double"
+                    },
+                    "valorDevido": {
+                        "type": "number",
+                        "description": "Valor da Parcela Devido atual, este é o valor \r\nbase para aplicação de juros multa e correção",
                         "format": "double"
                     },
                     "vencimento": {
                         "type": "string",
+                        "description": "Data de Vencimento da parcela",
                         "format": "date-time"
+                    },
+                    "dtCorrigidoAte": {
+                        "type": "string",
+                        "description": "Caso o valor Devido esteja corrigido, informando este atributo\r\no Adaptor corrigirá o valor a partir desta data e \r\nnão iniciando na datavencimento",
+                        "format": "date-time",
+                        "nullable": true
                     },
                     "titulo": {
                         "type": "string",
+                        "description": "Número do título da parcela",
                         "nullable": true
                     }
                 },
                 "additionalProperties": false
             },
             "MdPessoa": {
+                "required": [
+                    "cpfCnpj",
+                    "emails",
+                    "nome",
+                    "telefones",
+                    "tipoPessoa"
+                ],
                 "type": "object",
                 "properties": {
                     "pessoaId": {
+                        "maxLength": 20,
                         "type": "integer",
+                        "description": "Indentificador da pessoa no sistema legado",
                         "format": "int32"
                     },
                     "nome": {
+                        "maxLength": 20,
+                        "minLength": 1,
                         "type": "string",
-                        "nullable": true
+                        "description": "Nome da pessoa"
+                    },
+                    "tipoPessoa": {
+                        "minLength": 1,
+                        "pattern": "[FJ]",
+                        "type": "string",
+                        "description": "Tipo de pessoa F ou J"
                     },
                     "cpfCnpj": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "number",
+                        "description": "Nome da pessoa",
+                        "format": "double"
                     },
                     "scores": {
                         "$ref": "#/components/schemas/MdScore"
@@ -270,6 +627,7 @@
                         "items": {
                             "$ref": "#/components/schemas/MdEndereco"
                         },
+                        "description": "Endereço do cliente",
                         "nullable": true
                     },
                     "telefones": {
@@ -277,14 +635,14 @@
                         "items": {
                             "$ref": "#/components/schemas/MdTelefone"
                         },
-                        "nullable": true
+                        "description": "Telefones do cliente"
                     },
                     "emails": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/MdEmail"
                         },
-                        "nullable": true
+                        "description": "Email do cliente"
                     }
                 },
                 "additionalProperties": false
@@ -293,33 +651,149 @@
                 "type": "object",
                 "properties": {
                     "score01": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "integer",
+                        "description": "Valor para Score1",
+                        "format": "int32"
                     },
                     "score02": {
-                        "type": "string",
-                        "nullable": true
+                        "type": "integer",
+                        "description": "Valor para Score2",
+                        "format": "int32"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Definição de Score"
             },
             "MdTelefone": {
+                "required": [
+                    "nrDDD",
+                    "numero"
+                ],
                 "type": "object",
                 "properties": {
                     "telefoneId": {
                         "type": "string",
+                        "description": "Id do Telefone no Legado",
                         "nullable": true
+                    },
+                    "nrDDD": {
+                        "maximum": 99,
+                        "minimum": 11,
+                        "type": "integer",
+                        "description": "Número do DDD",
+                        "format": "int32"
                     },
                     "numero": {
-                        "type": "string",
-                        "nullable": true
+                        "maximum": 999999999,
+                        "minimum": 11111111,
+                        "type": "integer",
+                        "description": "Número do Telefone",
+                        "format": "int64"
                     },
                     "tipo": {
-                        "type": "string",
-                        "nullable": true
+                        "$ref": "#/components/schemas/TipoTelefone"
+                    },
+                    "whatsapp": {
+                        "type": "boolean",
+                        "description": "Padrão Whatsapp"
                     }
                 },
                 "additionalProperties": false
+            },
+            "RetornoAcordo": {
+                "type": "object",
+                "properties": {
+                    "dividaId": {
+                        "maxLength": 40,
+                        "type": "string",
+                        "description": "Identificador da Dívida no sistema legado",
+                        "nullable": true
+                    },
+                    "acordoId": {
+                        "type": "string",
+                        "description": "Idenificador único do Acordo no Adaptor",
+                        "nullable": true
+                    },
+                    "dataAcordo": {
+                        "type": "string",
+                        "description": "Data que o acordo foi gerado",
+                        "format": "date-time"
+                    },
+                    "parcelasAcordo": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RetornoParcelaAcordo"
+                        },
+                        "description": "Relaão das parcelas de Acordo",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Dados de retorno de acordo Adaptor"
+            },
+            "RetornoLote": {
+                "type": "object",
+                "properties": {
+                    "numeroLote": {
+                        "type": "integer",
+                        "description": "Número do lote gerado para o recebimento",
+                        "format": "int64"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "RetornoParcelaAcordo": {
+                "type": "object",
+                "properties": {
+                    "parcelaAcordoId": {
+                        "type": "string",
+                        "description": "Identificaçã o única da parcela de acordo Adaptor",
+                        "nullable": true
+                    },
+                    "numero": {
+                        "type": "integer",
+                        "description": "Número da parcela de acordo",
+                        "format": "int32"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "description": "Valor da Parcela",
+                        "format": "double"
+                    },
+                    "vencimento": {
+                        "type": "string",
+                        "description": "Data de vencimento da Parcela",
+                        "format": "date-time"
+                    },
+                    "nossoNumero": {
+                        "type": "string",
+                        "description": "Nosso número Gerado",
+                        "nullable": true
+                    },
+                    "paga": {
+                        "type": "boolean",
+                        "description": "Indicador de parcela paga ou não"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "TipoEndereco": {
+                "enum": [
+                    1,
+                    2,
+                    3
+                ],
+                "type": "integer",
+                "format": "int32"
+            },
+            "TipoTelefone": {
+                "enum": [
+                    1,
+                    2,
+                    3
+                ],
+                "type": "integer",
+                "format": "int32"
             }
         }
     }
