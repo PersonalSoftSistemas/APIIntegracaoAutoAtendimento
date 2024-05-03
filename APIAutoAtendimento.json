@@ -599,7 +599,7 @@
                     "pessoaId": {
                         "maxLength": 20,
                         "type": "integer",
-                        "description": "Indentificador da pessoa no sistema legado",
+                        "description": "Identificador da pessoa no sistema legado",
                         "format": "int32"
                     },
                     "nome": {
