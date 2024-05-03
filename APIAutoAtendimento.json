@@ -72,6 +72,63 @@
                         "description": "Server Error"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Dividas"
+                ],
+                "summary": "Retira de cobrança dividas que estão na listagem",
+                "requestBody": {
+                    "description": "Lista de Ids que serão retirados",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdEnvioRetirada"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdEnvioRetirada"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MdEnvioRetirada"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetornoLote"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
             }
         },
         "/api/Dividas/Acordos/Pedente": {
@@ -240,84 +297,6 @@
                     }
                 }
             }
-        },
-        "/api/Dividas/{dividaId}": {
-            "delete": {
-                "tags": [
-                    "Dividas"
-                ],
-                "summary": "Retira de cobrança dividas que estão na listagem",
-                "parameters": [
-                    {
-                        "name": "dividaId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "text/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "application/*+json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "text/plain": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RetornoLote"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RetornoLote"
-                                }
-                            },
-                            "text/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RetornoLote"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                }
-            }
         }
     },
     "components": {
@@ -345,14 +324,17 @@
                 "properties": {
                     "acordoId": {
                         "type": "string",
+                        "description": "Id único do Acordo enviado no momento que o acordo foi capturado pelo Legado",
                         "nullable": true
                     },
                     "parcelaAcordoId": {
                         "type": "string",
+                        "description": "Id único da parcela enviado no momento que o acordo foi capturado pelo Legado",
                         "nullable": true
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Responsável pela Baixas de parcelas de acordos realizado no Adaptor"
             },
             "MdDivida": {
                 "required": [
@@ -405,7 +387,8 @@
                         "nullable": true
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Objeto Dívida com dados de cliente , localização e financeiro"
             },
             "MdEmail": {
                 "required": [
@@ -426,7 +409,8 @@
                         "description": "Endereço de e-mail"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "E-mail informação opcional porém útil para contato com cliente"
             },
             "MdEndereco": {
                 "required": [
@@ -493,6 +477,21 @@
                 },
                 "additionalProperties": false,
                 "description": "Dados do Endereço"
+            },
+            "MdEnvioRetirada": {
+                "type": "object",
+                "properties": {
+                    "dividaIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Lista de Ids de dívidas do Legado para retirada de cobrança",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Objeto para solicitação de retirada"
             },
             "MdEstrategia": {
                 "type": "object",
@@ -584,7 +583,8 @@
                         "nullable": true
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Dados do financeiro do cliente, parcelas originais representam os títulos que estão\r\npendentes de pagamento e ficarão disponíveis para acordo"
             },
             "MdPessoa": {
                 "required": [
@@ -645,7 +645,8 @@
                         "description": "Email do cliente"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Informações do cliente e dados de localização\r\nUm cliente representa um inadimplente que possui dívida"
             },
             "MdScore": {
                 "type": "object",
@@ -698,7 +699,8 @@
                         "description": "Padrão Whatsapp"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Telefones do cliente Obrigatório ao menos um registro"
             },
             "RetornoAcordo": {
                 "type": "object",
@@ -740,7 +742,8 @@
                         "format": "int64"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "A cada envio para processamento um lote é gerado \r\na entrega desse lote representa que os dados foram aceitos e \r\nestão integros para importação"
             },
             "RetornoParcelaAcordo": {
                 "type": "object",
@@ -775,24 +778,28 @@
                         "description": "Indicador de parcela paga ou não"
                     }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Dados da Parcela de acordo do cliente.\r\nUma vez o acordo realizado novas parcelas de acordos são geradas"
             },
             "TipoEndereco": {
                 "enum": [
                     1,
                     2,
-                    3
+                    99
                 ],
                 "type": "integer",
+                "description": "Tipo de Endereço 1-Comercial, 2 - Residencial ,  99 - Outros\r\nQuando não há uma definição de tipo de telefone aplica-se outros",
                 "format": "int32"
             },
             "TipoTelefone": {
                 "enum": [
                     1,
                     2,
-                    3
+                    3,
+                    99
                 ],
                 "type": "integer",
+                "description": "Tipo de Telefone 1-Comercial, 2 - Residencial, 3 - Celular ou 99 - Outros\r\nQuando não há uma definição de tipo de telefone aplica-se outros",
                 "format": "int32"
             }
         }
