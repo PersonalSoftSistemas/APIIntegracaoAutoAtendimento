@@ -1,755 +1,1340 @@
-swagger: '3.0'
-info:
-  version: '1.0.0'
-  title: 'Integra��o Bot API'
-  description: 'API para integra��o de sistema de negocia��o de d�vidas via Bot com Adaptor.'
-host: '{{DominioCliente}}'
-basePath: '/wsAPIAdaptorApi/api'
-schemes:
-  - 'https'
-  - 'http'
-consumes:
-  - 'application/json'
-  - 'application/x-www-form-urlencoded'
-produces:
-  - 'application/json'
-paths:
-  /security/token:
-    post:
-      tags:
-        - 'Autentica��o'
-      summary: 'Obt�m o token de autentica��o'
-      description: 'Este endpoint � usado para obter um token de autentica��o que ser� necess�rio para os pr�ximos requests.'
-      consumes:
-        - 'application/x-www-form-urlencoded'
-      parameters:
-        - name: 'UserName'
-          in: 'formData'
-          description: 'Nome de usu�rio do Bot'
-          required: true
-          type: 'string'
-        - name: 'password'
-          in: 'formData'
-          description: 'Senha do usu�rio'
-          required: true
-          type: 'string'
-        - name: 'grant_type'
-          in: 'formData'
-          required: true
-          type: 'string'
-          default: 'password'
-      responses:
-        200:
-          description: 'Autentica��o bem-sucedida'
-          schema:
-            type: 'object'
-            properties:
-              access_token:
-                type: 'string'
-              token_type:
-                type: 'string'
-              expires_in:
-                type: 'integer'
-              SenhaExpirada:
-                type: 'string'
-              Usuario:
-                type: 'string'
-              Id:
-                type: 'string'
-              .issued:
-                type: 'string'
-              .expires:
-                type: 'string'
-        400:
-          description: 'Erro de autentica��o'
-          schema:
-            type: 'object'
-            properties:
-              error:
-                type: 'string'
-              error_description:
-                type: 'string'
-  /AutoAtendimento/BuscarDividasInscricao/{cpf/cnpj}:
-    get:
-      tags:
-        - 'Consulta de D�vidas'
-      summary: 'Busca d�vidas por CPF/CNPJ'
-      description: 'Retorna as d�vidas eleg�veis para negocia��o de um dado CPF/CNPJ.'
-      parameters:
-        - name: 'cpf/cnpj'
-          in: 'path'
-          description: 'CPF ou CNPJ do cliente'
-          required: true
-          type: 'string'
-        - name: 'Authorization'
-          in: 'header'
-          description: 'Token de autentica��o'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Lista de d�vidas retornadas com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              Status:
-                type: 'string'
-              StatusText:
-                type: 'string'
-              Exception:
-                type: 'string'
-              Retorno:
-                type: 'object'
-                properties:
-                  Pessoa:
-                    type: 'object'
-                    properties:
-                      CdPessoa:
-                        type: 'integer'
-                      NrInscricao:
-                        type: 'string'
-                      InFisicoJuridico:
-                        type: 'string'
-                      Nome:
-                        type: 'string'
-                      CodigoCredor:
-                        type: 'string'
-                      NrCodigoCredor:
-                        type: 'string'
-                      NrInscricaoFormatado:
-                        type: 'string'
-                  Dividas:
-                    type: 'array'
-                    items:
-                      type: 'object'
-                      properties:
-                        ChaveDivida:
-                          type: 'string'
-                        CdContrato:
-                          type: 'string'
-                        ValorPrincipal:
-                          type: 'string'
-                        VrCampoAuxiliar:
-                          type: 'string'
-                        Negociada:
-                          type: 'boolean'
-                        TermoAceite:
-                          type: 'integer'
-                        ConfissaoDivida:
-                          type: 'integer'
-                        ApenasConsultaDivida:
-                          type: 'boolean'
-                        NegociacaoEmAtraso:
-                          type: 'boolean'
-                        DtPrazoMaximo:
-                          type: 'string'
-                        NegociacoesAtiva:
-                          type: 'array'
-                          items:
-                            type: 'string'
-                        NegociacaoPermitida:
-                          type: 'boolean'
-                        Credor:
-                          type: 'object'
-                          properties:
-                            TpCredor:
-                              type: 'integer'
-                            Codigo:
-                              type: 'integer'
-                            CodigoCredor:
-                              type: 'string'
-                            Nome:
-                              type: 'string'
-                        Produto:
-                          type: 'object'
-                          properties:
-                            PermiteAcordoCartao:
-                              type: 'boolean'
-                            Codigo:
-                              type: 'integer'
-                            CodigoCredor:
-                              type: 'string'
-                            Nome:
-                              type: 'string'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        404:
-          description: 'N�o encontra d�vida para este CPF/CNPJ ou erro de sistema'
-
-  /AutoAtendimento/ParcelsOriginaisAtivas/{ChaveDivida}:
-    get:
-      tags:
-        - 'Consulta de Parcelas'
-      summary: 'Carrega parcelas ativas de uma d�vida'
-      description: 'Ap�s a autentica��o e obten��o das d�vidas, este endpoint permite consultar as parcelas ativas associadas a uma d�vida.'
-      parameters:
-        - name: 'ChaveDivida'
-          in: 'path'
-          description: 'Chave �nica da d�vida retornada no endpoint anterior'
-          required: true
-          type: 'string'
-        - name: 'Authorization'
-          in: 'header'
-          description: 'Token de autentica��o'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Parcelas carregadas com sucesso'
-          schema:
-            type: 'array'
-            items:
-              type: 'object'
-              properties:
-                Obrigatorio:
-                  type: 'boolean'
-                PermiteSaltar:
-                  type: 'boolean'
-                SqParcela:
-                  type: 'integer'
-                SqParcelaCredor:
-                  type: 'integer'
-                CdNegociacao:
-                  type: 'integer'
-                DtVencimento:
-                  type: 'string'
-                VrParcela:
-                  type: 'number'
-                DtRecebimento:
-                  type: 'string'
-                TipoPagamento:
-                  type: 'string'
-                VrPago:
-                  type: 'number'
-                NrTitulo:
-                  type: 'string'
-                DsCompetencia:
-                  type: 'string'
-                Atraso:
-                  type: 'integer'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        404:
-          description: 'Chave inv�lida ou erro de sistema'
-        400:
-          description: 'A consulta n�o permitiu c�lculo ou formaliza��o de acordo para esta d�vida'
-
-  /AutoAtendimento/OpcoesDeAcordo/{ChaveDivida}/{qtParcelas}/{ParcelasOriginais}/{ValorEntrada}/false/dataPrimeira:
-    get:
-      tags:
-        - 'Simula��o de Acordo'
-      summary: 'Simula op��es de pagamento para uma d�vida'
-      description: 'Este endpoint permite simular diferentes op��es de pagamento para uma d�vida baseado nas parcelas selecionadas e entrada.'
-      parameters:
-        - name: 'ChaveDivida'
-          in: 'path'
-          description: 'Chave �nica da d�vida'
-          required: true
-          type: 'string'
-        - name: 'qtParcelas'
-          in: 'path'
-          description: 'Quantidade de parcelas desejadas no plano de pagamento'
-          required: true
-          type: 'integer'
-        - name: 'ParcelasOriginais'
-          in: 'path'
-          description: 'Lista de parcelas originais separadas por v�rgula'
-          required: true
-          type: 'string'
-        - name: 'ValorEntrada'
-          in: 'path'
-          description: 'Valor de entrada para o acordo'
-          required: true
-          type: 'number'
-        - name: 'dataPrimeira'
-          in: 'path'
-          description: 'Data do primeiro vencimento no formato ddMMyyyy'
-          required: true
-          type: 'string'
-        - name: 'Authorization'
-          in: 'header'
-          description: 'Token de autentica��o'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Op��es de pagamento calculadas com sucesso'
-          schema:
-            type: 'array'
-            items:
-              type: 'object'
-              properties:
-                vrEntrada:
-                  type: 'number'
-                dtPrimeiroVencimento:
-                  type: 'string'
-                plano:
-                  type: 'integer'
-                valorTotal:
-                  type: 'number'
-                descricaoAcordo:
-                  type: 'string'
-                descontos:
-                  type: 'object'
-                  properties:
-                    correcao:
-                      type: 'object'
-                      properties:
-                        valorCobrado:
-                          type: 'number'
-                        percentual:
-                          type: 'number'
-                        valor:
-                          type: 'number'
-                        valorDevido:
-                          type: 'number'
-                    juros:
-                      type: 'object'
-                    multa:
-                      type: 'object'
-                    principal:
-                      type: 'object'
-                    IOF:
-                      type: 'object'
-                    TAC:
-                      type: 'object'
-                    valorAcrescimoCobrado:
-                      type: 'number'
-                    totalDevido:
-                      type: 'number'
-                    totalDescontos:
-                      type: 'number'
-                    totalNegociado:
-                      type: 'number'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        404:
-          description: 'Erro de sistema'
-
-  /AutoAtendimento/FormalizarAcordo:
-    post:
-      tags:
-        - 'Formaliza��o de Acordo'
-      summary: 'Formaliza um acordo'
-      description: 'Este endpoint � usado para formalizar um acordo ap�s a simula��o ser aprovada.'
-      consumes:
-        - 'application/json'
-      parameters:
-        - in: 'body'
-          name: 'body'
-          description: 'Dados necess�rios para formalizar o acordo'
-          required: true
-          schema:
-            type: 'object'
-            properties:
-              negociador:
-                type: 'string'
-                description: 'Nome do negociador respons�vel pelo acordo'
-              chaveacordo:
-                type: 'string'
-                description: 'Chave do acordo simulado'
-      responses:
-        200:
-          description: 'Acordo formalizado com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              chaveNegociacao:
-                type: 'string'
-                description: 'Chave de identifica��o da negocia��o para envio de boleto por e-mail'
-        400:
-          description: 'Validade da chave expirada, por favor refa�a o c�lculo do acordo'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        404:
-          description: 'Erro de sistema'
-        500:
-          description: 'Erro geral'
-
-  /Boleta/enviarEmail/{chaveNegociacao}:
-    post:
-      tags:
-        - 'Envio de Boleto'
-      summary: 'Envia boleto por e-mail'
-      description: 'Envia um e-mail com a boleta para um destino espec�fico ou para todos os e-mails do cliente.'
-      parameters:
-        - name: 'chaveNegociacao'
-          in: 'path'
-          description: 'Chave de negocia��o obtida ap�s a formaliza��o do acordo'
-          required: true
-          type: 'string'
-        - in: 'body'
-          name: 'body'
-          description: 'E-mail de destino, se necess�rio'
-          schema:
-            type: 'object'
-            properties:
-              emailDestino:
-                type: 'string'
-                description: 'E-mail espec�fico para envio do boleto'
-      responses:
-        200:
-          description: 'Boleto enviado com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              Status:
-                type: 'string'
-              StatusText:
-                type: 'string'
-              Retorno:
-                type: 'string'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        400:
-          description: 'Chave de negocia��o inv�lida'
-        404:
-          description: 'Erro de sistema'
-        500:
-          description: 'Erro geral'
-
-  /Boleta/linhaDigitavel/{chaveNegociacao}:
-    get:
-      tags:
-        - 'Consulta Linha Digit�vel'
-      summary: 'Obt�m a linha digit�vel do boleto'
-      description: 'Retorna a linha digit�vel do boleto para pagamento.'
-      parameters:
-        - name: 'chaveNegociacao'
-          in: 'path'
-          description: 'Chave de negocia��o obtida ap�s a formaliza��o do acordo'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Linha digit�vel obtida com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              linhaDigitavel:
-                type: 'string'
-              vencimento:
-                type: 'string'
-              valor:
-                type: 'string'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        400:
-          description: 'Chave de negocia��o inv�lida'
-        404:
-          description: 'Erro de sistema'
-        500:
-          description: 'Erro geral'
-  /Boleta/enviarSMS/{chaveNegociacao}:
-    get:
-      tags:
-        - 'Envio de SMS'
-      summary: 'Envia SMS para o cliente'
-      description: 'Envia um SMS para todos os telefones celulares do cliente com a linha digit�vel do boleto.'
-      parameters:
-        - name: 'chaveNegociacao'
-          in: 'path'
-          description: 'Chave de negocia��o obtida ap�s a formaliza��o do acordo'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'SMS enviado com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              Status:
-                type: 'string'
-              StatusText:
-                type: 'string'
-              Retorno:
-                type: 'string'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        400:
-          description: 'Chave de negocia��o inv�lida ou cliente sem telefone registrado'
-        404:
-          description: 'Erro de sistema'
-        500:
-          description: 'Erro geral'
-  /Boleta/arquivoBoleta/{chaveNegociacao}:
-    get:
-      tags:
-        - 'Recupera��o de Boleto'
-      summary: 'Obt�m o arquivo de boleto em PDF'
-      description: 'Fornece o arquivo de boleto em formato PDF codificado em base64, usando a chave de negocia��o fornecida.'
-      parameters:
-        - name: 'chaveNegociacao'
-          in: 'path'
-          description: 'Chave de negocia��o obtida ap�s a formaliza��o do acordo'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Arquivo de boleto obtido com sucesso'
-          schema:
-            type: 'object'
-            properties:
-              Status:
-                type: 'string'
-              StatusText:
-                type: 'string'
-              Exception:
-                type: 'string'
-              Retorno:
-                type: 'object'
-                properties:
-                  arquivoPDFBase64:
-                    type: 'string'
-                    description: 'Conte�do do arquivo de boleto em formato PDF codificado em base64'
-        401:
-          description: 'N�o autorizado � Token inv�lido ou inexistente'
-        400:
-          description: 'Chave de negocia��o inv�lida'
-        404:
-          description: 'Erro de sistema'
-        500:
-          description: 'Erro geral'
-
-  /Acionamento/Externo/Incluir/{chavedivida64}:
-    post:
-      tags:
-        - 'Acionamento Externo'
-      summary: 'Incluir acionamento externo para uma d�vida espec�fica'
-      description: 'Inclui um acionamento externo usando uma chave de d�vida espec�fica.'
-      parameters:
-        - name: 'chavedivida64'
-          in: 'path'
-          required: true
-          type: 'string'
-          description: 'Chave da d�vida codificada em base64'
-        - in: 'body'
-          name: 'body'
-          description: 'Dados do acionamento externo'
-          required: true
-          schema:
-            type: 'object'
-            properties:
-              cdEvento:
-                type: 'integer'
-                description: 'C�digo do evento'
-              dsNotas:
-                type: 'string'
-                description: 'Descri��o ou notas adicionais'
-              naUsuario:
-                type: 'string'
-                description: 'Nome de usu�rio associado ao acionamento'
-              telefones:
-                type: 'array'
-                items:
-                  type: 'object'
-                  properties:
-                    inCPC:
-                      type: 'boolean'
-                      description: 'Indica se o telefone est� no CPC'
-                    inWhatsAPP:
-                      type: 'boolean'
-                      description: 'Indica se o telefone possui WhatsApp'
-                    NrDDD:
-                      type: 'string'
-                      description: 'DDD do telefone'
-                    NrTelefone:
-                      type: 'string'
-                      description: 'N�mero do telefone'
-      responses:
-        200:
-          description: 'Acionamento inclu�do com sucesso'
-        400:
-          description: 'Dados inv�lidos ou erro na requisi��o'
-        401:
-          description: 'N�o autorizado'
-        500:
-          description: 'Erro interno do servidor'
-
-  /Acionamento/Externo/incluir/TodasDividas/{Inscricao}/{CdCredor}:
-    post:
-      tags:
-        - 'Acionamento Externo'
-      summary: 'Incluir acionamento externo para todas as d�vidas de um inscrito'
-      description: 'Inclui um acionamento externo para todas as d�vidas associadas a uma inscri��o e credor espec�ficos.'
-      parameters:
-        - name: 'Inscricao'
-          in: 'path'
-          required: true
-          type: 'string'
-          description: 'N�mero de inscri��o do devedor'
-        - name: 'CdCredor'
-          in: 'path'
-          required: true
-          type: 'string'
-          description: 'C�digo do credor'
-        - in: 'body'
-          name: 'body'
-          description: 'Dados do acionamento externo'
-          required: true
-          schema:
-            type: 'object'
-            properties:
-              cdEvento:
-                type: 'integer'
-                description: 'C�digo do evento'
-              dsNotas:
-                type: 'string'
-                description: 'Descri��o ou notas adicionais'
-              naUsuario:
-                type: 'string'
-                description: 'Nome de usu�rio associado ao acionamento'
-              telefones:
-                type: 'array'
-                items:
-                  type: 'object'
-                  properties:
-                    inCPC:
-                      type: 'boolean'
-                      description: 'Indica se o telefone est� no CPC'
-                    inWhatsAPP:
-                      type: 'boolean'
-                      description: 'Indica se o telefone possui WhatsApp'
-                    NrDDD:
-                      type: 'string'
-                      description: 'DDD do telefone'
-                    NrTelefone:
-                      type: 'string'
-                      description: 'N�mero do telefone'
-      responses:
-        200:
-          description: 'Acionamento inclu�do com sucesso para todas as d�vidas'
-        400:
-          description: 'Dados inv�lidos ou erro na requisi��o'
-        401:
-          description: 'N�o autorizado'
-        500:
-          description: 'Erro interno do servidor'
-
-  /AutoAtendimento/BuscarNegociacoesInscricao/{NRCPFCNPJ}:
-    get:
-      tags:
-        - 'Consulta de Negocia��es'
-      summary: 'Busca negocia��es por CPF/CNPJ'
-      description: 'Retorna detalhes das negocia��es para o CPF/CNPJ especificado.'
-      parameters:
-        - name: 'NRCPFCNPJ'
-          in: 'path'
-          required: true
-          type: 'string'
-          description: 'N�mero do CPF ou CNPJ do cliente'
-      responses:
-        200:
-          description: 'Negocia��es encontradas com sucesso'
-          schema:
-            type: 'array'
-            items:
-              type: 'object'
-              properties:
-                dtNegociacao:
-                  type: 'string'
-                  description: 'Data da negocia��o'
-                cdContrato:
-                  type: 'string'
-                  description: 'C�digo do contrato'
-                PermitePagamentoComCartao:
-                  type: 'boolean'
-                  description: 'Indica se permite pagamento com cart�o'
-                TermoAceite:
-                  type: 'integer'
-                  description: 'Termo de aceite'
-                ConfissaoDivida:
-                  type: 'integer'
-                  description: 'Confiss�o de d�vida'
-                PlanoNegociadoCartao:
-                  type: 'object'
-                  properties:
-                    QtParcelas:
-                      type: 'integer'
-                      description: 'Quantidade de parcelas no plano negociado com cart�o'
-                    TotalAcordo:
-                      type: 'number'
-                      description: 'Total do acordo'
-                chaveNegociacao:
-                  type: 'string'
-                  description: 'Chave �nica da negocia��o'
-                Credor:
-                  type: 'object'
-                  properties:
-                    Codigo:
-                      type: 'integer'
-                      description: 'C�digo do credor'
-                    CodigoCredor:
-                      type: 'string'
-                      description: 'C�digo espec�fico do credor'
-                    Nome:
-                      type: 'string'
-                      description: 'Nome do credor'
-                Produto:
-                  type: 'object'
-                  properties:
-                    Codigo:
-                      type: 'integer'
-                      description: 'C�digo do produto'
-                    CodigoCredor:
-                      type: 'string'
-                      description: 'C�digo espec�fico do produto pelo credor'
-                    Nome:
-                      type: 'string'
-                      description: 'Nome do produto'
-                vencimento:
-                  type: 'string'
-                  description: 'Data de vencimento'
-                valor:
-                  type: 'string'
-                  description: 'Valor da negocia��o'
-                pagamentoOutrosMeios:
-                  type: 'boolean'
-                  description: 'Indica se o pagamento por outros meios � permitido'
-                CdMensagemOutrosMeios:
-                  type: 'integer'
-                  description: 'C�digo da mensagem para outros meios de pagamento'
-                permiteEmissaoBoleta:
-                  type: 'boolean'
-                  description: 'Indica se a emiss�o de boleta � permitida'
-                ParcelasAcordo:
-                  type: 'array'
-                  items:
-                    type: 'object'
-                    properties:
-                      sqParcelaCredor:
-                        type: 'integer'
-                        description: 'Sequ�ncia da parcela pelo credor'
-                      valor:
-                        type: 'number'
-                        description: 'Valor da parcela'
-                      vencimento:
-                        type: 'string'
-                        description: 'Data de vencimento da parcela'
-                      emAberto:
-                        type: 'boolean'
-                        description: 'Indica se a parcela est� em aberto'
-                      dtRecebimento:
-                        type: 'string'
-                        description: 'Data de recebimento da parcela'
-                      cdTipoPagamento:
-                        type: 'integer'
-                        description: 'C�digo do tipo de pagamento'
-                      emissaoBoletaPermitida:
-                        type: 'boolean'
-                        description: 'Indica se a emiss�o de boleta para a parcela � permitida'
-                resumoAcordo:
-                  type: 'string'
-                  description: 'Resumo do acordo'
-                situacaoAcordo:
-                  type: 'string'
-                  description: 'Situa��o atual do acordo'
-        400:
-          description: 'Requisi��o inv�lida'
-        401:
-          description: 'N�o autorizado'
-        404:
-          description: 'Nenhuma negocia��o encontrada para o CPF/CNPJ fornecido'
-        500:
-          description: 'Erro interno do servidor'
-
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Integra��o Bot API",
+    "description": "API para integra��o de sistema de negocia��o de d�vidas via Bot com Adaptor.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{{DominioCliente}}/wsAPIAdaptorApi/api"
+    },
+    {
+      "url": "http://{{DominioCliente}}/wsAPIAdaptorApi/api"
+    }
+  ],
+  "paths": {
+    "/security/token": {
+      "post": {
+        "tags": [
+          "Autentica��o"
+        ],
+        "summary": "Obt�m o token de autentica��o",
+        "description": "Este endpoint � usado para obter um token de autentica��o que ser� necess�rio para os pr�ximos requests.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": [
+                  "UserName",
+                  "grant_type",
+                  "password"
+                ],
+                "type": "object",
+                "properties": {
+                  "UserName": {
+                    "type": "string",
+                    "description": "Nome de usu�rio do Bot"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Senha do usu�rio"
+                  },
+                  "grant_type": {
+                    "type": "string",
+                    "default": "password"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Autentica��o bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "expires_in": {
+                      "type": "integer"
+                    },
+                    "SenhaExpirada": {
+                      "type": "string"
+                    },
+                    "Usuario": {
+                      "type": "string"
+                    },
+                    "Id": {
+                      "type": "string"
+                    },
+                    ".issued": {
+                      "type": "string"
+                    },
+                    ".expires": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de autentica��o",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "error_description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AutoAtendimento/BuscarDividasInscricao/{cpf/cnpj}": {
+      "get": {
+        "tags": [
+          "Consulta de D�vidas"
+        ],
+        "summary": "Busca d�vidas por CPF/CNPJ",
+        "description": "Retorna as d�vidas eleg�veis para negocia��o de um dado CPF/CNPJ.",
+        "parameters": [
+          {
+            "name": "cpf/cnpj",
+            "in": "path",
+            "description": "CPF ou CNPJ do cliente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Token de autentica��o",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de d�vidas retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Status": {
+                      "type": "string"
+                    },
+                    "StatusText": {
+                      "type": "string"
+                    },
+                    "Exception": {
+                      "type": "string"
+                    },
+                    "Retorno": {
+                      "type": "object",
+                      "properties": {
+                        "Pessoa": {
+                          "type": "object",
+                          "properties": {
+                            "CdPessoa": {
+                              "type": "integer"
+                            },
+                            "NrInscricao": {
+                              "type": "string"
+                            },
+                            "InFisicoJuridico": {
+                              "type": "string"
+                            },
+                            "Nome": {
+                              "type": "string"
+                            },
+                            "CodigoCredor": {
+                              "type": "string"
+                            },
+                            "NrCodigoCredor": {
+                              "type": "string"
+                            },
+                            "NrInscricaoFormatado": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "Dividas": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "ChaveDivida": {
+                                "type": "string"
+                              },
+                              "CdContrato": {
+                                "type": "string"
+                              },
+                              "ValorPrincipal": {
+                                "type": "string"
+                              },
+                              "VrCampoAuxiliar": {
+                                "type": "string"
+                              },
+                              "Negociada": {
+                                "type": "boolean"
+                              },
+                              "TermoAceite": {
+                                "type": "integer"
+                              },
+                              "ConfissaoDivida": {
+                                "type": "integer"
+                              },
+                              "ApenasConsultaDivida": {
+                                "type": "boolean"
+                              },
+                              "NegociacaoEmAtraso": {
+                                "type": "boolean"
+                              },
+                              "DtPrazoMaximo": {
+                                "type": "string"
+                              },
+                              "NegociacoesAtiva": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "NegociacaoPermitida": {
+                                "type": "boolean"
+                              },
+                              "Credor": {
+                                "type": "object",
+                                "properties": {
+                                  "TpCredor": {
+                                    "type": "integer"
+                                  },
+                                  "Codigo": {
+                                    "type": "integer"
+                                  },
+                                  "CodigoCredor": {
+                                    "type": "string"
+                                  },
+                                  "Nome": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "Produto": {
+                                "type": "object",
+                                "properties": {
+                                  "PermiteAcordoCartao": {
+                                    "type": "boolean"
+                                  },
+                                  "Codigo": {
+                                    "type": "integer"
+                                  },
+                                  "CodigoCredor": {
+                                    "type": "string"
+                                  },
+                                  "Nome": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "N�o encontra d�vida para este CPF/CNPJ ou erro de sistema",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/AutoAtendimento/ParcelsOriginaisAtivas/{ChaveDivida}": {
+      "get": {
+        "tags": [
+          "Consulta de Parcelas"
+        ],
+        "summary": "Carrega parcelas ativas de uma d�vida",
+        "description": "Ap�s a autentica��o e obten��o das d�vidas, este endpoint permite consultar as parcelas ativas associadas a uma d�vida.",
+        "parameters": [
+          {
+            "name": "ChaveDivida",
+            "in": "path",
+            "description": "Chave �nica da d�vida retornada no endpoint anterior",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Token de autentica��o",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Parcelas carregadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Obrigatorio": {
+                        "type": "boolean"
+                      },
+                      "PermiteSaltar": {
+                        "type": "boolean"
+                      },
+                      "SqParcela": {
+                        "type": "integer"
+                      },
+                      "SqParcelaCredor": {
+                        "type": "integer"
+                      },
+                      "CdNegociacao": {
+                        "type": "integer"
+                      },
+                      "DtVencimento": {
+                        "type": "string"
+                      },
+                      "VrParcela": {
+                        "type": "number"
+                      },
+                      "DtRecebimento": {
+                        "type": "string"
+                      },
+                      "TipoPagamento": {
+                        "type": "string"
+                      },
+                      "VrPago": {
+                        "type": "number"
+                      },
+                      "NrTitulo": {
+                        "type": "string"
+                      },
+                      "DsCompetencia": {
+                        "type": "string"
+                      },
+                      "Atraso": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A consulta n�o permitiu c�lculo ou formaliza��o de acordo para esta d�vida",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Chave inv�lida ou erro de sistema",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/AutoAtendimento/OpcoesDeAcordo/{ChaveDivida}/{qtParcelas}/{ParcelasOriginais}/{ValorEntrada}/false/dataPrimeira": {
+      "get": {
+        "tags": [
+          "Simula��o de Acordo"
+        ],
+        "summary": "Simula op��es de pagamento para uma d�vida",
+        "description": "Este endpoint permite simular diferentes op��es de pagamento para uma d�vida baseado nas parcelas selecionadas e entrada.",
+        "parameters": [
+          {
+            "name": "ChaveDivida",
+            "in": "path",
+            "description": "Chave �nica da d�vida",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "qtParcelas",
+            "in": "path",
+            "description": "Quantidade de parcelas desejadas no plano de pagamento",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ParcelasOriginais",
+            "in": "path",
+            "description": "Lista de parcelas originais separadas por v�rgula",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ValorEntrada",
+            "in": "path",
+            "description": "Valor de entrada para o acordo",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "dataPrimeira",
+            "in": "path",
+            "description": "Data do primeiro vencimento no formato ddMMyyyy",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Token de autentica��o",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Op��es de pagamento calculadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "vrEntrada": {
+                        "type": "number"
+                      },
+                      "dtPrimeiroVencimento": {
+                        "type": "string"
+                      },
+                      "plano": {
+                        "type": "integer"
+                      },
+                      "valorTotal": {
+                        "type": "number"
+                      },
+                      "descricaoAcordo": {
+                        "type": "string"
+                      },
+                      "descontos": {
+                        "type": "object",
+                        "properties": {
+                          "correcao": {
+                            "type": "object",
+                            "properties": {
+                              "valorCobrado": {
+                                "type": "number"
+                              },
+                              "percentual": {
+                                "type": "number"
+                              },
+                              "valor": {
+                                "type": "number"
+                              },
+                              "valorDevido": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "juros": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "multa": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "principal": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "IOF": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "TAC": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "valorAcrescimoCobrado": {
+                            "type": "number"
+                          },
+                          "totalDevido": {
+                            "type": "number"
+                          },
+                          "totalDescontos": {
+                            "type": "number"
+                          },
+                          "totalNegociado": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/AutoAtendimento/FormalizarAcordo": {
+      "post": {
+        "tags": [
+          "Formaliza��o de Acordo"
+        ],
+        "summary": "Formaliza um acordo",
+        "description": "Este endpoint � usado para formalizar um acordo ap�s a simula��o ser aprovada.",
+        "requestBody": {
+          "description": "Dados necess�rios para formalizar o acordo",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "negociador": {
+                    "type": "string",
+                    "description": "Nome do negociador respons�vel pelo acordo"
+                  },
+                  "chaveacordo": {
+                    "type": "string",
+                    "description": "Chave do acordo simulado"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Acordo formalizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "chaveNegociacao": {
+                      "type": "string",
+                      "description": "Chave de identifica��o da negocia��o para envio de boleto por e-mail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validade da chave expirada, por favor refa�a o c�lculo do acordo",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro geral",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/Boleta/enviarEmail/{chaveNegociacao}": {
+      "post": {
+        "tags": [
+          "Envio de Boleto"
+        ],
+        "summary": "Envia boleto por e-mail",
+        "description": "Envia um e-mail com a boleta para um destino espec�fico ou para todos os e-mails do cliente.",
+        "parameters": [
+          {
+            "name": "chaveNegociacao",
+            "in": "path",
+            "description": "Chave de negocia��o obtida ap�s a formaliza��o do acordo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "E-mail de destino, se necess�rio",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "emailDestino": {
+                    "type": "string",
+                    "description": "E-mail espec�fico para envio do boleto"
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "emailDestino": {
+                    "type": "string",
+                    "description": "E-mail espec�fico para envio do boleto"
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Boleto enviado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Status": {
+                      "type": "string"
+                    },
+                    "StatusText": {
+                      "type": "string"
+                    },
+                    "Retorno": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chave de negocia��o inv�lida",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro geral",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/Boleta/linhaDigitavel/{chaveNegociacao}": {
+      "get": {
+        "tags": [
+          "Consulta Linha Digit�vel"
+        ],
+        "summary": "Obt�m a linha digit�vel do boleto",
+        "description": "Retorna a linha digit�vel do boleto para pagamento.",
+        "parameters": [
+          {
+            "name": "chaveNegociacao",
+            "in": "path",
+            "description": "Chave de negocia��o obtida ap�s a formaliza��o do acordo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Linha digit�vel obtida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "linhaDigitavel": {
+                      "type": "string"
+                    },
+                    "vencimento": {
+                      "type": "string"
+                    },
+                    "valor": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chave de negocia��o inv�lida",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro geral",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/Boleta/enviarSMS/{chaveNegociacao}": {
+      "get": {
+        "tags": [
+          "Envio de SMS"
+        ],
+        "summary": "Envia SMS para o cliente",
+        "description": "Envia um SMS para todos os telefones celulares do cliente com a linha digit�vel do boleto.",
+        "parameters": [
+          {
+            "name": "chaveNegociacao",
+            "in": "path",
+            "description": "Chave de negocia��o obtida ap�s a formaliza��o do acordo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SMS enviado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Status": {
+                      "type": "string"
+                    },
+                    "StatusText": {
+                      "type": "string"
+                    },
+                    "Retorno": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chave de negocia��o inv�lida ou cliente sem telefone registrado",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro geral",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/Boleta/arquivoBoleta/{chaveNegociacao}": {
+      "get": {
+        "tags": [
+          "Recupera��o de Boleto"
+        ],
+        "summary": "Obt�m o arquivo de boleto em PDF",
+        "description": "Fornece o arquivo de boleto em formato PDF codificado em base64, usando a chave de negocia��o fornecida.",
+        "parameters": [
+          {
+            "name": "chaveNegociacao",
+            "in": "path",
+            "description": "Chave de negocia��o obtida ap�s a formaliza��o do acordo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Arquivo de boleto obtido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Status": {
+                      "type": "string"
+                    },
+                    "StatusText": {
+                      "type": "string"
+                    },
+                    "Exception": {
+                      "type": "string"
+                    },
+                    "Retorno": {
+                      "type": "object",
+                      "properties": {
+                        "arquivoPDFBase64": {
+                          "type": "string",
+                          "description": "Conte�do do arquivo de boleto em formato PDF codificado em base64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chave de negocia��o inv�lida",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado � Token inv�lido ou inexistente",
+            "content": {}
+          },
+          "404": {
+            "description": "Erro de sistema",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro geral",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/Acionamento/Externo/Incluir/{chavedivida64}": {
+      "post": {
+        "tags": [
+          "Acionamento Externo"
+        ],
+        "summary": "Incluir acionamento externo para uma d�vida espec�fica",
+        "description": "Inclui um acionamento externo usando uma chave de d�vida espec�fica.",
+        "parameters": [
+          {
+            "name": "chavedivida64",
+            "in": "path",
+            "description": "Chave da d�vida codificada em base64",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do acionamento externo",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cdEvento": {
+                    "type": "integer",
+                    "description": "C�digo do evento"
+                  },
+                  "dsNotas": {
+                    "type": "string",
+                    "description": "Descri��o ou notas adicionais"
+                  },
+                  "naUsuario": {
+                    "type": "string",
+                    "description": "Nome de usu�rio associado ao acionamento"
+                  },
+                  "telefones": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inCPC": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone est� no CPC"
+                        },
+                        "inWhatsAPP": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone possui WhatsApp"
+                        },
+                        "NrDDD": {
+                          "type": "string",
+                          "description": "DDD do telefone"
+                        },
+                        "NrTelefone": {
+                          "type": "string",
+                          "description": "N�mero do telefone"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cdEvento": {
+                    "type": "integer",
+                    "description": "C�digo do evento"
+                  },
+                  "dsNotas": {
+                    "type": "string",
+                    "description": "Descri��o ou notas adicionais"
+                  },
+                  "naUsuario": {
+                    "type": "string",
+                    "description": "Nome de usu�rio associado ao acionamento"
+                  },
+                  "telefones": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inCPC": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone est� no CPC"
+                        },
+                        "inWhatsAPP": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone possui WhatsApp"
+                        },
+                        "NrDDD": {
+                          "type": "string",
+                          "description": "DDD do telefone"
+                        },
+                        "NrTelefone": {
+                          "type": "string",
+                          "description": "N�mero do telefone"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Acionamento inclu�do com sucesso",
+            "content": {}
+          },
+          "400": {
+            "description": "Dados inv�lidos ou erro na requisi��o",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/Acionamento/Externo/incluir/TodasDividas/{Inscricao}/{CdCredor}": {
+      "post": {
+        "tags": [
+          "Acionamento Externo"
+        ],
+        "summary": "Incluir acionamento externo para todas as d�vidas de um inscrito",
+        "description": "Inclui um acionamento externo para todas as d�vidas associadas a uma inscri��o e credor espec�ficos.",
+        "parameters": [
+          {
+            "name": "Inscricao",
+            "in": "path",
+            "description": "N�mero de inscri��o do devedor",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "CdCredor",
+            "in": "path",
+            "description": "C�digo do credor",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do acionamento externo",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cdEvento": {
+                    "type": "integer",
+                    "description": "C�digo do evento"
+                  },
+                  "dsNotas": {
+                    "type": "string",
+                    "description": "Descri��o ou notas adicionais"
+                  },
+                  "naUsuario": {
+                    "type": "string",
+                    "description": "Nome de usu�rio associado ao acionamento"
+                  },
+                  "telefones": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inCPC": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone est� no CPC"
+                        },
+                        "inWhatsAPP": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone possui WhatsApp"
+                        },
+                        "NrDDD": {
+                          "type": "string",
+                          "description": "DDD do telefone"
+                        },
+                        "NrTelefone": {
+                          "type": "string",
+                          "description": "N�mero do telefone"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cdEvento": {
+                    "type": "integer",
+                    "description": "C�digo do evento"
+                  },
+                  "dsNotas": {
+                    "type": "string",
+                    "description": "Descri��o ou notas adicionais"
+                  },
+                  "naUsuario": {
+                    "type": "string",
+                    "description": "Nome de usu�rio associado ao acionamento"
+                  },
+                  "telefones": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "inCPC": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone est� no CPC"
+                        },
+                        "inWhatsAPP": {
+                          "type": "boolean",
+                          "description": "Indica se o telefone possui WhatsApp"
+                        },
+                        "NrDDD": {
+                          "type": "string",
+                          "description": "DDD do telefone"
+                        },
+                        "NrTelefone": {
+                          "type": "string",
+                          "description": "N�mero do telefone"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Acionamento inclu�do com sucesso para todas as d�vidas",
+            "content": {}
+          },
+          "400": {
+            "description": "Dados inv�lidos ou erro na requisi��o",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/AutoAtendimento/BuscarNegociacoesInscricao/{NRCPFCNPJ}": {
+      "get": {
+        "tags": [
+          "Consulta de Negocia��es"
+        ],
+        "summary": "Busca negocia��es por CPF/CNPJ",
+        "description": "Retorna detalhes das negocia��es para o CPF/CNPJ especificado.",
+        "parameters": [
+          {
+            "name": "NRCPFCNPJ",
+            "in": "path",
+            "description": "N�mero do CPF ou CNPJ do cliente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Negocia��es encontradas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "dtNegociacao": {
+                        "type": "string",
+                        "description": "Data da negocia��o"
+                      },
+                      "cdContrato": {
+                        "type": "string",
+                        "description": "C�digo do contrato"
+                      },
+                      "PermitePagamentoComCartao": {
+                        "type": "boolean",
+                        "description": "Indica se permite pagamento com cart�o"
+                      },
+                      "TermoAceite": {
+                        "type": "integer",
+                        "description": "Termo de aceite"
+                      },
+                      "ConfissaoDivida": {
+                        "type": "integer",
+                        "description": "Confiss�o de d�vida"
+                      },
+                      "PlanoNegociadoCartao": {
+                        "type": "object",
+                        "properties": {
+                          "QtParcelas": {
+                            "type": "integer",
+                            "description": "Quantidade de parcelas no plano negociado com cart�o"
+                          },
+                          "TotalAcordo": {
+                            "type": "number",
+                            "description": "Total do acordo"
+                          }
+                        }
+                      },
+                      "chaveNegociacao": {
+                        "type": "string",
+                        "description": "Chave �nica da negocia��o"
+                      },
+                      "Credor": {
+                        "type": "object",
+                        "properties": {
+                          "Codigo": {
+                            "type": "integer",
+                            "description": "C�digo do credor"
+                          },
+                          "CodigoCredor": {
+                            "type": "string",
+                            "description": "C�digo espec�fico do credor"
+                          },
+                          "Nome": {
+                            "type": "string",
+                            "description": "Nome do credor"
+                          }
+                        }
+                      },
+                      "Produto": {
+                        "type": "object",
+                        "properties": {
+                          "Codigo": {
+                            "type": "integer",
+                            "description": "C�digo do produto"
+                          },
+                          "CodigoCredor": {
+                            "type": "string",
+                            "description": "C�digo espec�fico do produto pelo credor"
+                          },
+                          "Nome": {
+                            "type": "string",
+                            "description": "Nome do produto"
+                          }
+                        }
+                      },
+                      "vencimento": {
+                        "type": "string",
+                        "description": "Data de vencimento"
+                      },
+                      "valor": {
+                        "type": "string",
+                        "description": "Valor da negocia��o"
+                      },
+                      "pagamentoOutrosMeios": {
+                        "type": "boolean",
+                        "description": "Indica se o pagamento por outros meios � permitido"
+                      },
+                      "CdMensagemOutrosMeios": {
+                        "type": "integer",
+                        "description": "C�digo da mensagem para outros meios de pagamento"
+                      },
+                      "permiteEmissaoBoleta": {
+                        "type": "boolean",
+                        "description": "Indica se a emiss�o de boleta � permitida"
+                      },
+                      "ParcelasAcordo": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "sqParcelaCredor": {
+                              "type": "integer",
+                              "description": "Sequ�ncia da parcela pelo credor"
+                            },
+                            "valor": {
+                              "type": "number",
+                              "description": "Valor da parcela"
+                            },
+                            "vencimento": {
+                              "type": "string",
+                              "description": "Data de vencimento da parcela"
+                            },
+                            "emAberto": {
+                              "type": "boolean",
+                              "description": "Indica se a parcela est� em aberto"
+                            },
+                            "dtRecebimento": {
+                              "type": "string",
+                              "description": "Data de recebimento da parcela"
+                            },
+                            "cdTipoPagamento": {
+                              "type": "integer",
+                              "description": "C�digo do tipo de pagamento"
+                            },
+                            "emissaoBoletaPermitida": {
+                              "type": "boolean",
+                              "description": "Indica se a emiss�o de boleta para a parcela � permitida"
+                            }
+                          }
+                        }
+                      },
+                      "resumoAcordo": {
+                        "type": "string",
+                        "description": "Resumo do acordo"
+                      },
+                      "situacaoAcordo": {
+                        "type": "string",
+                        "description": "Situa��o atual do acordo"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisi��o inv�lida",
+            "content": {}
+          },
+          "401": {
+            "description": "N�o autorizado",
+            "content": {}
+          },
+          "404": {
+            "description": "Nenhuma negocia��o encontrada para o CPF/CNPJ fornecido",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "x-original-swagger-version": "3.0"
+}
