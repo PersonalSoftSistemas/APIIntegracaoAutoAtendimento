@@ -14,10 +14,20 @@ info:
   **Integração:**
   A integração é realizada por meio de endpoints desenvolvidos pela PersonalSoft, onde o Bot, conforme necessário, acessa métodos específicos para consultar condições de acordo e prosseguir com a formalização do mesmo.
   
-  **Exemplo de Fluxo possível:**'
+  **Exemplo de Fluxo possível:**
+  Início: "Começo do chat com saudação e pedido de CPF/CNPJ."
+  Autenticação: "Verificação de identidade."
+  Consulta de Dívidas: "Apresentação das dívidas existentes."
+  Opções de Negociação: "Exibição de opções de pagamento."
+  Seleção de Plano: "Usuário escolhe ou personaliza plano."
+  Simulação de Acordo: "Detalhamento financeiro do plano escolhido."
+  Confirmação do Acordo: "Usuário aceita os termos."
+  Formalização do Acordo: "Processo de formalização e geração de documentos."
+  Emissão de Boleto/Link: "Envio de boleto ou link para pagamento."
+  Encerramento: "Agradecimento e oferta de nova ajuda."'
   
 
- host: '{{DominioCliente}}'
+host: '{{DominioCliente}}'
 basePath: '/WebApiAdaptor/api'
 schemes:
   - 'https'
@@ -39,7 +49,7 @@ paths:
       parameters:
         - name: 'UserName'
           in: 'formData'
-          description: 'Nome de usuário do Bot'
+          description: 'Nome de usuário do Bot. Esse usuário é um login do Adaptor que pode ser criado diretamente no sistema.'
           required: true
           type: 'string'
         - name: 'password'
@@ -75,7 +85,7 @@ paths:
               .expires:
                 type: 'string'
         400:
-          description: 'Erro de autenticação'
+          description: 'Credenciais inválida para acesso UserName'
           schema:
             type: 'object'
             properties:
