@@ -2,16 +2,23 @@ swagger: '2.0'
 info:
   version: '1.0.0'
   title: 'Integração Bot API'
-  description: 'Objetivo:
-	Possibilitar a realização de acordo com os clientes via Bot integrado com Adaptor, isto é, no momento que um acordo for realizado via Bot a dívida ficará negociada no Adaptor.
-	Cenário:
-	O Bot entrará em contato com os clientes e tentará formalizar os acordos respeitando sempre a política
-	de negociação do Credor.
-	Integração:
-	Toda a integração se realizará através de endpoints desenvolvidos pela PersonalSoft. O Bot sempre que	julgar necessário solicitará no endpoint os métodos para consultar as condições e formalizar acordo. 	No momento do diálogo aberto entre o cliente e o Bot, não podemos ter problemas de performance na consulta de condições de acordo, porém entendemos que a performance está relacionada a fatores internos e externos à integração, tais como, disponibilidade banda de internet e disponibilidade de banco, que são fatores principais que poderão impactar diretamente nos retornos de respostas.
-	Visando minimizar este impacto sugerimos que durante o contato preliminar com o cliente (confirmação de dados cadastrais por exemplo CPF, nome etc..), o Bot já realize consultas das condições préestabelecidas, deixando apenas para a conclusão do atendimento a formalização do acordo ou não'
-host: '{{DominioCliente}}'
-basePath: '/wsAPIAdaptorApi/api'
+  description: ' 
+  Esta API visa facilitar a realização de acordos com clientes por meio de um Bot integrado ao Adaptor. Quando um acordo é realizado via Bot, a dívida é negociada e registrada no sistema Adaptor.
+
+  **Objetivo:**
+  Possibilitar a realização de acordo com os clientes via Bot integrado com Adaptor, isto é, no momento que um acordo for realizado via Bot a dívida ficará negociada no Adaptor..
+
+  **Cenário:**
+  O Bot entrará em contato com os clientes e tentará formalizar os acordos respeitando sempre a política de negociação do Credor. Este processo é desenhado para ser eficiente e alinhado às necessidades tanto do parceiro que utilizará quanto dos clientes.
+
+  **Integração:**
+  A integração é realizada por meio de endpoints desenvolvidos pela PersonalSoft, onde o Bot, conforme necessário, acessa métodos específicos para consultar condições de acordo e prosseguir com a formalização do mesmo.
+  
+  **Exemplo de Fluxo possível:**'
+  
+
+ host: '{{DominioCliente}}'
+basePath: '/WebApiAdaptor/api'
 schemes:
   - 'https'
   - 'http'
