@@ -1,8 +1,8 @@
-swagger: '2.0'
+swagger: '3.0'
 info:
   version: '1.0.0'
-  title: 'Integração Bot API'
-  description: 'API para integração de sistema de negociação de dívidas via Bot com Adaptor.'
+  title: 'Integraï¿½ï¿½o Bot API'
+  description: 'API para integraï¿½ï¿½o de sistema de negociaï¿½ï¿½o de dï¿½vidas via Bot com Adaptor.'
 host: '{{DominioCliente}}'
 basePath: '/wsAPIAdaptorApi/api'
 schemes:
@@ -17,20 +17,20 @@ paths:
   /security/token:
     post:
       tags:
-        - 'Autenticação'
-      summary: 'Obtém o token de autenticação'
-      description: 'Este endpoint é usado para obter um token de autenticação que será necessário para os próximos requests.'
+        - 'Autenticaï¿½ï¿½o'
+      summary: 'Obtï¿½m o token de autenticaï¿½ï¿½o'
+      description: 'Este endpoint ï¿½ usado para obter um token de autenticaï¿½ï¿½o que serï¿½ necessï¿½rio para os prï¿½ximos requests.'
       consumes:
         - 'application/x-www-form-urlencoded'
       parameters:
         - name: 'UserName'
           in: 'formData'
-          description: 'Nome de usuário do Bot'
+          description: 'Nome de usuï¿½rio do Bot'
           required: true
           type: 'string'
         - name: 'password'
           in: 'formData'
-          description: 'Senha do usuário'
+          description: 'Senha do usuï¿½rio'
           required: true
           type: 'string'
         - name: 'grant_type'
@@ -40,7 +40,7 @@ paths:
           default: 'password'
       responses:
         200:
-          description: 'Autenticação bem-sucedida'
+          description: 'Autenticaï¿½ï¿½o bem-sucedida'
           schema:
             type: 'object'
             properties:
@@ -61,7 +61,7 @@ paths:
               .expires:
                 type: 'string'
         400:
-          description: 'Erro de autenticação'
+          description: 'Erro de autenticaï¿½ï¿½o'
           schema:
             type: 'object'
             properties:
@@ -72,9 +72,9 @@ paths:
   /AutoAtendimento/BuscarDividasInscricao/{cpf/cnpj}:
     get:
       tags:
-        - 'Consulta de Dívidas'
-      summary: 'Busca dívidas por CPF/CNPJ'
-      description: 'Retorna as dívidas elegíveis para negociação de um dado CPF/CNPJ.'
+        - 'Consulta de Dï¿½vidas'
+      summary: 'Busca dï¿½vidas por CPF/CNPJ'
+      description: 'Retorna as dï¿½vidas elegï¿½veis para negociaï¿½ï¿½o de um dado CPF/CNPJ.'
       parameters:
         - name: 'cpf/cnpj'
           in: 'path'
@@ -83,12 +83,12 @@ paths:
           type: 'string'
         - name: 'Authorization'
           in: 'header'
-          description: 'Token de autenticação'
+          description: 'Token de autenticaï¿½ï¿½o'
           required: true
           type: 'string'
       responses:
         200:
-          description: 'Lista de dívidas retornadas com sucesso'
+          description: 'Lista de dï¿½vidas retornadas com sucesso'
           schema:
             type: 'object'
             properties:
@@ -172,25 +172,25 @@ paths:
                             Nome:
                               type: 'string'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         404:
-          description: 'Não encontra dívida para este CPF/CNPJ ou erro de sistema'
+          description: 'Nï¿½o encontra dï¿½vida para este CPF/CNPJ ou erro de sistema'
 
   /AutoAtendimento/ParcelsOriginaisAtivas/{ChaveDivida}:
     get:
       tags:
         - 'Consulta de Parcelas'
-      summary: 'Carrega parcelas ativas de uma dívida'
-      description: 'Após a autenticação e obtenção das dívidas, este endpoint permite consultar as parcelas ativas associadas a uma dívida.'
+      summary: 'Carrega parcelas ativas de uma dï¿½vida'
+      description: 'Apï¿½s a autenticaï¿½ï¿½o e obtenï¿½ï¿½o das dï¿½vidas, este endpoint permite consultar as parcelas ativas associadas a uma dï¿½vida.'
       parameters:
         - name: 'ChaveDivida'
           in: 'path'
-          description: 'Chave única da dívida retornada no endpoint anterior'
+          description: 'Chave ï¿½nica da dï¿½vida retornada no endpoint anterior'
           required: true
           type: 'string'
         - name: 'Authorization'
           in: 'header'
-          description: 'Token de autenticação'
+          description: 'Token de autenticaï¿½ï¿½o'
           required: true
           type: 'string'
       responses:
@@ -228,22 +228,22 @@ paths:
                 Atraso:
                   type: 'integer'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         404:
-          description: 'Chave inválida ou erro de sistema'
+          description: 'Chave invï¿½lida ou erro de sistema'
         400:
-          description: 'A consulta não permitiu cálculo ou formalização de acordo para esta dívida'
+          description: 'A consulta nï¿½o permitiu cï¿½lculo ou formalizaï¿½ï¿½o de acordo para esta dï¿½vida'
 
   /AutoAtendimento/OpcoesDeAcordo/{ChaveDivida}/{qtParcelas}/{ParcelasOriginais}/{ValorEntrada}/false/dataPrimeira:
     get:
       tags:
-        - 'Simulação de Acordo'
-      summary: 'Simula opções de pagamento para uma dívida'
-      description: 'Este endpoint permite simular diferentes opções de pagamento para uma dívida baseado nas parcelas selecionadas e entrada.'
+        - 'Simulaï¿½ï¿½o de Acordo'
+      summary: 'Simula opï¿½ï¿½es de pagamento para uma dï¿½vida'
+      description: 'Este endpoint permite simular diferentes opï¿½ï¿½es de pagamento para uma dï¿½vida baseado nas parcelas selecionadas e entrada.'
       parameters:
         - name: 'ChaveDivida'
           in: 'path'
-          description: 'Chave única da dívida'
+          description: 'Chave ï¿½nica da dï¿½vida'
           required: true
           type: 'string'
         - name: 'qtParcelas'
@@ -253,7 +253,7 @@ paths:
           type: 'integer'
         - name: 'ParcelasOriginais'
           in: 'path'
-          description: 'Lista de parcelas originais separadas por vírgula'
+          description: 'Lista de parcelas originais separadas por vï¿½rgula'
           required: true
           type: 'string'
         - name: 'ValorEntrada'
@@ -268,12 +268,12 @@ paths:
           type: 'string'
         - name: 'Authorization'
           in: 'header'
-          description: 'Token de autenticação'
+          description: 'Token de autenticaï¿½ï¿½o'
           required: true
           type: 'string'
       responses:
         200:
-          description: 'Opções de pagamento calculadas com sucesso'
+          description: 'Opï¿½ï¿½es de pagamento calculadas com sucesso'
           schema:
             type: 'array'
             items:
@@ -322,29 +322,29 @@ paths:
                     totalNegociado:
                       type: 'number'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         404:
           description: 'Erro de sistema'
 
   /AutoAtendimento/FormalizarAcordo:
     post:
       tags:
-        - 'Formalização de Acordo'
+        - 'Formalizaï¿½ï¿½o de Acordo'
       summary: 'Formaliza um acordo'
-      description: 'Este endpoint é usado para formalizar um acordo após a simulação ser aprovada.'
+      description: 'Este endpoint ï¿½ usado para formalizar um acordo apï¿½s a simulaï¿½ï¿½o ser aprovada.'
       consumes:
         - 'application/json'
       parameters:
         - in: 'body'
           name: 'body'
-          description: 'Dados necessários para formalizar o acordo'
+          description: 'Dados necessï¿½rios para formalizar o acordo'
           required: true
           schema:
             type: 'object'
             properties:
               negociador:
                 type: 'string'
-                description: 'Nome do negociador responsável pelo acordo'
+                description: 'Nome do negociador responsï¿½vel pelo acordo'
               chaveacordo:
                 type: 'string'
                 description: 'Chave do acordo simulado'
@@ -356,11 +356,11 @@ paths:
             properties:
               chaveNegociacao:
                 type: 'string'
-                description: 'Chave de identificação da negociação para envio de boleto por e-mail'
+                description: 'Chave de identificaï¿½ï¿½o da negociaï¿½ï¿½o para envio de boleto por e-mail'
         400:
-          description: 'Validade da chave expirada, por favor refaça o cálculo do acordo'
+          description: 'Validade da chave expirada, por favor refaï¿½a o cï¿½lculo do acordo'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         404:
           description: 'Erro de sistema'
         500:
@@ -371,22 +371,22 @@ paths:
       tags:
         - 'Envio de Boleto'
       summary: 'Envia boleto por e-mail'
-      description: 'Envia um e-mail com a boleta para um destino específico ou para todos os e-mails do cliente.'
+      description: 'Envia um e-mail com a boleta para um destino especï¿½fico ou para todos os e-mails do cliente.'
       parameters:
         - name: 'chaveNegociacao'
           in: 'path'
-          description: 'Chave de negociação obtida após a formalização do acordo'
+          description: 'Chave de negociaï¿½ï¿½o obtida apï¿½s a formalizaï¿½ï¿½o do acordo'
           required: true
           type: 'string'
         - in: 'body'
           name: 'body'
-          description: 'E-mail de destino, se necessário'
+          description: 'E-mail de destino, se necessï¿½rio'
           schema:
             type: 'object'
             properties:
               emailDestino:
                 type: 'string'
-                description: 'E-mail específico para envio do boleto'
+                description: 'E-mail especï¿½fico para envio do boleto'
       responses:
         200:
           description: 'Boleto enviado com sucesso'
@@ -400,9 +400,9 @@ paths:
               Retorno:
                 type: 'string'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         400:
-          description: 'Chave de negociação inválida'
+          description: 'Chave de negociaï¿½ï¿½o invï¿½lida'
         404:
           description: 'Erro de sistema'
         500:
@@ -411,18 +411,18 @@ paths:
   /Boleta/linhaDigitavel/{chaveNegociacao}:
     get:
       tags:
-        - 'Consulta Linha Digitável'
-      summary: 'Obtém a linha digitável do boleto'
-      description: 'Retorna a linha digitável do boleto para pagamento.'
+        - 'Consulta Linha Digitï¿½vel'
+      summary: 'Obtï¿½m a linha digitï¿½vel do boleto'
+      description: 'Retorna a linha digitï¿½vel do boleto para pagamento.'
       parameters:
         - name: 'chaveNegociacao'
           in: 'path'
-          description: 'Chave de negociação obtida após a formalização do acordo'
+          description: 'Chave de negociaï¿½ï¿½o obtida apï¿½s a formalizaï¿½ï¿½o do acordo'
           required: true
           type: 'string'
       responses:
         200:
-          description: 'Linha digitável obtida com sucesso'
+          description: 'Linha digitï¿½vel obtida com sucesso'
           schema:
             type: 'object'
             properties:
@@ -433,9 +433,9 @@ paths:
               valor:
                 type: 'string'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         400:
-          description: 'Chave de negociação inválida'
+          description: 'Chave de negociaï¿½ï¿½o invï¿½lida'
         404:
           description: 'Erro de sistema'
         500:
@@ -445,11 +445,11 @@ paths:
       tags:
         - 'Envio de SMS'
       summary: 'Envia SMS para o cliente'
-      description: 'Envia um SMS para todos os telefones celulares do cliente com a linha digitável do boleto.'
+      description: 'Envia um SMS para todos os telefones celulares do cliente com a linha digitï¿½vel do boleto.'
       parameters:
         - name: 'chaveNegociacao'
           in: 'path'
-          description: 'Chave de negociação obtida após a formalização do acordo'
+          description: 'Chave de negociaï¿½ï¿½o obtida apï¿½s a formalizaï¿½ï¿½o do acordo'
           required: true
           type: 'string'
       responses:
@@ -465,9 +465,9 @@ paths:
               Retorno:
                 type: 'string'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         400:
-          description: 'Chave de negociação inválida ou cliente sem telefone registrado'
+          description: 'Chave de negociaï¿½ï¿½o invï¿½lida ou cliente sem telefone registrado'
         404:
           description: 'Erro de sistema'
         500:
@@ -475,13 +475,13 @@ paths:
   /Boleta/arquivoBoleta/{chaveNegociacao}:
     get:
       tags:
-        - 'Recuperação de Boleto'
-      summary: 'Obtém o arquivo de boleto em PDF'
-      description: 'Fornece o arquivo de boleto em formato PDF codificado em base64, usando a chave de negociação fornecida.'
+        - 'Recuperaï¿½ï¿½o de Boleto'
+      summary: 'Obtï¿½m o arquivo de boleto em PDF'
+      description: 'Fornece o arquivo de boleto em formato PDF codificado em base64, usando a chave de negociaï¿½ï¿½o fornecida.'
       parameters:
         - name: 'chaveNegociacao'
           in: 'path'
-          description: 'Chave de negociação obtida após a formalização do acordo'
+          description: 'Chave de negociaï¿½ï¿½o obtida apï¿½s a formalizaï¿½ï¿½o do acordo'
           required: true
           type: 'string'
       responses:
@@ -501,28 +501,28 @@ paths:
                 properties:
                   arquivoPDFBase64:
                     type: 'string'
-                    description: 'Conteúdo do arquivo de boleto em formato PDF codificado em base64'
+                    description: 'Conteï¿½do do arquivo de boleto em formato PDF codificado em base64'
         401:
-          description: 'Não autorizado – Token inválido ou inexistente'
+          description: 'Nï¿½o autorizado ï¿½ Token invï¿½lido ou inexistente'
         400:
-          description: 'Chave de negociação inválida'
+          description: 'Chave de negociaï¿½ï¿½o invï¿½lida'
         404:
           description: 'Erro de sistema'
         500:
           description: 'Erro geral'
 
- /Acionamento/Externo/Incluir/{chavedivida64}:
+  /Acionamento/Externo/Incluir/{chavedivida64}:
     post:
       tags:
         - 'Acionamento Externo'
-      summary: 'Incluir acionamento externo para uma dívida específica'
-      description: 'Inclui um acionamento externo usando uma chave de dívida específica.'
+      summary: 'Incluir acionamento externo para uma dï¿½vida especï¿½fica'
+      description: 'Inclui um acionamento externo usando uma chave de dï¿½vida especï¿½fica.'
       parameters:
         - name: 'chavedivida64'
           in: 'path'
           required: true
           type: 'string'
-          description: 'Chave da dívida codificada em base64'
+          description: 'Chave da dï¿½vida codificada em base64'
         - in: 'body'
           name: 'body'
           description: 'Dados do acionamento externo'
@@ -532,13 +532,13 @@ paths:
             properties:
               cdEvento:
                 type: 'integer'
-                description: 'Código do evento'
+                description: 'Cï¿½digo do evento'
               dsNotas:
                 type: 'string'
-                description: 'Descrição ou notas adicionais'
+                description: 'Descriï¿½ï¿½o ou notas adicionais'
               naUsuario:
                 type: 'string'
-                description: 'Nome de usuário associado ao acionamento'
+                description: 'Nome de usuï¿½rio associado ao acionamento'
               telefones:
                 type: 'array'
                 items:
@@ -546,7 +546,7 @@ paths:
                   properties:
                     inCPC:
                       type: 'boolean'
-                      description: 'Indica se o telefone está no CPC'
+                      description: 'Indica se o telefone estï¿½ no CPC'
                     inWhatsAPP:
                       type: 'boolean'
                       description: 'Indica se o telefone possui WhatsApp'
@@ -555,14 +555,14 @@ paths:
                       description: 'DDD do telefone'
                     NrTelefone:
                       type: 'string'
-                      description: 'Número do telefone'
+                      description: 'Nï¿½mero do telefone'
       responses:
         200:
-          description: 'Acionamento incluído com sucesso'
+          description: 'Acionamento incluï¿½do com sucesso'
         400:
-          description: 'Dados inválidos ou erro na requisição'
+          description: 'Dados invï¿½lidos ou erro na requisiï¿½ï¿½o'
         401:
-          description: 'Não autorizado'
+          description: 'Nï¿½o autorizado'
         500:
           description: 'Erro interno do servidor'
 
@@ -570,19 +570,19 @@ paths:
     post:
       tags:
         - 'Acionamento Externo'
-      summary: 'Incluir acionamento externo para todas as dívidas de um inscrito'
-      description: 'Inclui um acionamento externo para todas as dívidas associadas a uma inscrição e credor específicos.'
+      summary: 'Incluir acionamento externo para todas as dï¿½vidas de um inscrito'
+      description: 'Inclui um acionamento externo para todas as dï¿½vidas associadas a uma inscriï¿½ï¿½o e credor especï¿½ficos.'
       parameters:
         - name: 'Inscricao'
           in: 'path'
           required: true
           type: 'string'
-          description: 'Número de inscrição do devedor'
+          description: 'Nï¿½mero de inscriï¿½ï¿½o do devedor'
         - name: 'CdCredor'
           in: 'path'
           required: true
           type: 'string'
-          description: 'Código do credor'
+          description: 'Cï¿½digo do credor'
         - in: 'body'
           name: 'body'
           description: 'Dados do acionamento externo'
@@ -592,13 +592,13 @@ paths:
             properties:
               cdEvento:
                 type: 'integer'
-                description: 'Código do evento'
+                description: 'Cï¿½digo do evento'
               dsNotas:
                 type: 'string'
-                description: 'Descrição ou notas adicionais'
+                description: 'Descriï¿½ï¿½o ou notas adicionais'
               naUsuario:
                 type: 'string'
-                description: 'Nome de usuário associado ao acionamento'
+                description: 'Nome de usuï¿½rio associado ao acionamento'
               telefones:
                 type: 'array'
                 items:
@@ -606,7 +606,7 @@ paths:
                   properties:
                     inCPC:
                       type: 'boolean'
-                      description: 'Indica se o telefone está no CPC'
+                      description: 'Indica se o telefone estï¿½ no CPC'
                     inWhatsAPP:
                       type: 'boolean'
                       description: 'Indica se o telefone possui WhatsApp'
@@ -615,32 +615,32 @@ paths:
                       description: 'DDD do telefone'
                     NrTelefone:
                       type: 'string'
-                      description: 'Número do telefone'
+                      description: 'Nï¿½mero do telefone'
       responses:
         200:
-          description: 'Acionamento incluído com sucesso para todas as dívidas'
+          description: 'Acionamento incluï¿½do com sucesso para todas as dï¿½vidas'
         400:
-          description: 'Dados inválidos ou erro na requisição'
+          description: 'Dados invï¿½lidos ou erro na requisiï¿½ï¿½o'
         401:
-          description: 'Não autorizado'
+          description: 'Nï¿½o autorizado'
         500:
           description: 'Erro interno do servidor'
 
   /AutoAtendimento/BuscarNegociacoesInscricao/{NRCPFCNPJ}:
     get:
       tags:
-        - 'Consulta de Negociações'
-      summary: 'Busca negociações por CPF/CNPJ'
-      description: 'Retorna detalhes das negociações para o CPF/CNPJ especificado.'
+        - 'Consulta de Negociaï¿½ï¿½es'
+      summary: 'Busca negociaï¿½ï¿½es por CPF/CNPJ'
+      description: 'Retorna detalhes das negociaï¿½ï¿½es para o CPF/CNPJ especificado.'
       parameters:
         - name: 'NRCPFCNPJ'
           in: 'path'
           required: true
           type: 'string'
-          description: 'Número do CPF ou CNPJ do cliente'
+          description: 'Nï¿½mero do CPF ou CNPJ do cliente'
       responses:
         200:
-          description: 'Negociações encontradas com sucesso'
+          description: 'Negociaï¿½ï¿½es encontradas com sucesso'
           schema:
             type: 'array'
             items:
@@ -648,40 +648,40 @@ paths:
               properties:
                 dtNegociacao:
                   type: 'string'
-                  description: 'Data da negociação'
+                  description: 'Data da negociaï¿½ï¿½o'
                 cdContrato:
                   type: 'string'
-                  description: 'Código do contrato'
+                  description: 'Cï¿½digo do contrato'
                 PermitePagamentoComCartao:
                   type: 'boolean'
-                  description: 'Indica se permite pagamento com cartão'
+                  description: 'Indica se permite pagamento com cartï¿½o'
                 TermoAceite:
                   type: 'integer'
                   description: 'Termo de aceite'
                 ConfissaoDivida:
                   type: 'integer'
-                  description: 'Confissão de dívida'
+                  description: 'Confissï¿½o de dï¿½vida'
                 PlanoNegociadoCartao:
                   type: 'object'
                   properties:
                     QtParcelas:
                       type: 'integer'
-                      description: 'Quantidade de parcelas no plano negociado com cartão'
+                      description: 'Quantidade de parcelas no plano negociado com cartï¿½o'
                     TotalAcordo:
                       type: 'number'
                       description: 'Total do acordo'
                 chaveNegociacao:
                   type: 'string'
-                  description: 'Chave única da negociação'
+                  description: 'Chave ï¿½nica da negociaï¿½ï¿½o'
                 Credor:
                   type: 'object'
                   properties:
                     Codigo:
                       type: 'integer'
-                      description: 'Código do credor'
+                      description: 'Cï¿½digo do credor'
                     CodigoCredor:
                       type: 'string'
-                      description: 'Código específico do credor'
+                      description: 'Cï¿½digo especï¿½fico do credor'
                     Nome:
                       type: 'string'
                       description: 'Nome do credor'
@@ -690,10 +690,10 @@ paths:
                   properties:
                     Codigo:
                       type: 'integer'
-                      description: 'Código do produto'
+                      description: 'Cï¿½digo do produto'
                     CodigoCredor:
                       type: 'string'
-                      description: 'Código específico do produto pelo credor'
+                      description: 'Cï¿½digo especï¿½fico do produto pelo credor'
                     Nome:
                       type: 'string'
                       description: 'Nome do produto'
@@ -702,16 +702,16 @@ paths:
                   description: 'Data de vencimento'
                 valor:
                   type: 'string'
-                  description: 'Valor da negociação'
+                  description: 'Valor da negociaï¿½ï¿½o'
                 pagamentoOutrosMeios:
                   type: 'boolean'
-                  description: 'Indica se o pagamento por outros meios é permitido'
+                  description: 'Indica se o pagamento por outros meios ï¿½ permitido'
                 CdMensagemOutrosMeios:
                   type: 'integer'
-                  description: 'Código da mensagem para outros meios de pagamento'
+                  description: 'Cï¿½digo da mensagem para outros meios de pagamento'
                 permiteEmissaoBoleta:
                   type: 'boolean'
-                  description: 'Indica se a emissão de boleta é permitida'
+                  description: 'Indica se a emissï¿½o de boleta ï¿½ permitida'
                 ParcelasAcordo:
                   type: 'array'
                   items:
@@ -719,7 +719,7 @@ paths:
                     properties:
                       sqParcelaCredor:
                         type: 'integer'
-                        description: 'Sequência da parcela pelo credor'
+                        description: 'Sequï¿½ncia da parcela pelo credor'
                       valor:
                         type: 'number'
                         description: 'Valor da parcela'
@@ -728,28 +728,28 @@ paths:
                         description: 'Data de vencimento da parcela'
                       emAberto:
                         type: 'boolean'
-                        description: 'Indica se a parcela está em aberto'
+                        description: 'Indica se a parcela estï¿½ em aberto'
                       dtRecebimento:
                         type: 'string'
                         description: 'Data de recebimento da parcela'
                       cdTipoPagamento:
                         type: 'integer'
-                        description: 'Código do tipo de pagamento'
+                        description: 'Cï¿½digo do tipo de pagamento'
                       emissaoBoletaPermitida:
                         type: 'boolean'
-                        description: 'Indica se a emissão de boleta para a parcela é permitida'
+                        description: 'Indica se a emissï¿½o de boleta para a parcela ï¿½ permitida'
                 resumoAcordo:
                   type: 'string'
                   description: 'Resumo do acordo'
                 situacaoAcordo:
                   type: 'string'
-                  description: 'Situação atual do acordo'
+                  description: 'Situaï¿½ï¿½o atual do acordo'
         400:
-          description: 'Requisição inválida'
+          description: 'Requisiï¿½ï¿½o invï¿½lida'
         401:
-          description: 'Não autorizado'
+          description: 'Nï¿½o autorizado'
         404:
-          description: 'Nenhuma negociação encontrada para o CPF/CNPJ fornecido'
+          description: 'Nenhuma negociaï¿½ï¿½o encontrada para o CPF/CNPJ fornecido'
         500:
           description: 'Erro interno do servidor'
 
