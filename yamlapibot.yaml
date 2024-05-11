@@ -70,7 +70,7 @@ paths:
             properties:
               access_token:
                 type: 'string'
-                example: 'R-a7ukH057P_ikeaCo_wiAzM2btw3N3Is-kHCfFNRICyUurJ4RMoRXlmJVQCn452S349bw46YIOYNXuW_YSx7JfS0w8yYlftk9WWRwz87_TeC7sXP4aA4wDNF4jhzJVXbxYjSSrBKU_MZa2h0uq97UTqIpsX80CQUsSh0ChFz7JXERjTCpvNDKKvsgMVtPCWqk8iQMdimLRIlC7Xl0WGWdOAAi1panVmu4ftQ8kB29PTYKJEPX9-rrw6MSV35E39uw_bG9Xx1HddfNy9VodTD0kFQE86n6lK9HHUYFvDUY2hXsf35brKjjS_kRhRg05JPncF6QbbuN35aWhs5gtmMmFKjb45poajJEK5lo7Bkd3nbWa8pC6xK0KEgEC7DHIYSK7JET3C5VpvLreCQsw"
+                example: 'R-a7ukH057P_ikeaCo_wiAzM2btw3N3Is-kHCfFNRICyUurJ4RMoRXlmJVQCn452S349bw46YIOYNXuW_YSx7JfS0w8yYlftk9WWRwz87_TeC7sXP4aA4wDNF4jhzJVXbxYjSSrBKU_MZa2h0uq97UTqIpsX80CQUsSh0ChFz7JXERjTCpvNDKKvsgMVtPCWqk8iQMdimLRIlC7Xl0WGWdOAAi1panVmu4ftQ8kB29PTYKJEPX9-rrw6MSV35E39uw_bG9Xx1HddfNy9VodTD0kFQE86n6lK9HHUYFvDUY2hXsf35brKjjS_kRhRg05JPncF6QbbuN35aWhs5gtmMmFKjb45poajJEK5lo7Bkd3nbWa8pC6xK0KEgEC7DHIYSK7JET3C5VpvLreCQsw'
               token_type:
                 type: 'string'
                 example: 'bearer'
