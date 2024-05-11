@@ -2,8 +2,8 @@ swagger: '2.0'
 info:
   version: '1.0.0'
   title: 'Integração Bot API'
-  description: ' 
-  Esta API visa facilitar a realização de acordos com clientes por meio de um Bot integrado ao Adaptor. Quando um acordo é realizado via Bot, a dívida é negociada e registrada no sistema Adaptor.
+  description: > 
+  'Esta API visa facilitar a realização de acordos com clientes por meio de um Bot integrado ao Adaptor. Quando um acordo é realizado via Bot, a dívida é negociada e registrada no sistema Adaptor.
 
   **Objetivo:**
   Possibilitar a realização de acordo com os clientes via Bot integrado com Adaptor, isto é, no momento que um acordo for realizado via Bot a dívida ficará negociada no Adaptor..
