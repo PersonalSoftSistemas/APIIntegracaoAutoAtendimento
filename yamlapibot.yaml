@@ -15,16 +15,16 @@ info:
   A integração é realizada por meio de endpoints desenvolvidos pela PersonalSoft, onde o Bot, conforme necessário, acessa métodos específicos para consultar condições de acordo e prosseguir com a formalização do mesmo.
   
   **Exemplo de Fluxo possível:**
-  Início: "Começo do chat com saudação e pedido de CPF/CNPJ."
-  Autenticação: "Verificação de identidade."
-  Consulta de Dívidas: "Apresentação das dívidas existentes."
-  Opções de Negociação: "Exibição de opções de pagamento."
-  Seleção de Plano: "Usuário escolhe ou personaliza plano."
-  Simulação de Acordo: "Detalhamento financeiro do plano escolhido."
-  Confirmação do Acordo: "Usuário aceita os termos."
-  Formalização do Acordo: "Processo de formalização e geração de documentos."
-  Emissão de Boleto/Link: "Envio de boleto ou link para pagamento."
-  Encerramento: "Agradecimento e oferta de nova ajuda."'
+  Início: Começo do chat com saudação e pedido de CPF/CNPJ.
+  Autenticação: Verificação de identidade.
+  Consulta de Dívidas: Apresentação das dívidas existentes.
+  Opções de Negociação: Exibição de opções de pagamento.
+  Seleção de Plano: Usuário escolhe ou personaliza plano.
+  Simulação de Acordo: Detalhamento financeiro do plano escolhido.
+  Confirmação do Acordo: Usuário aceita os termos.
+  Formalização do Acordo: Processo de formalização e geração de documentos.
+  Emissão de Boleto/Link: Envio de boleto ou link para pagamento.
+  Encerramento: Agradecimento e oferta de nova ajuda.'
   
 
 host: '{{DominioCliente}}'
