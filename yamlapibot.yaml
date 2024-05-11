@@ -91,7 +91,7 @@ paths:
                 example: 'Thu, 18 Jun 2024 13:03:46 GMT'
               .expires:
                 type: 'string'
-                 example: 'Fri, 19 Jun 2024 03:03:46 GMT'
+                example: 'Fri, 19 Jun 2024 03:03:46 GMT'
         400:
           description: 'Credenciais inválida para acesso UserName'
           schema:
